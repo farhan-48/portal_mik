@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Pusat Data & Analisis Kesehatan – TEFA PSDKU MIK Ngawi</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ══ RESET & ROOT ══ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#0f6fba; --primary-dark:#0a4f8a; --primary-light:#e0f0ff;
+  --teal:#0d9488; --teal-light:#ccfbf1;
+  --orange:#ea580c; --orange-light:#fff7ed;
+  --bg:#f4f8fd; --surface:#fff; --text:#0f172a;
+  --muted:#64748b; --border:#e2e8f0;
+  --nav-h:68px; --r:14px;
+  --sh:0 2px 20px rgba(15,111,186,.08);
+  --sh-lg:0 8px 40px rgba(15,111,186,.16);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ══ NAV ══ */
+nav{
+  position:fixed;inset:0 0 auto;z-index:900;height:var(--nav-h);
+  background:rgba(255,255,255,.96);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 28px;gap:0;
+  box-shadow:0 2px 14px rgba(15,111,186,.07);
+}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;margin-right:auto;flex-shrink:0;cursor:pointer;}
+.nav-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f6fba,#0d9488);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.nav-brand-text strong{display:block;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--primary);line-height:1.2;}
+.nav-brand-text span{font-size:11px;color:var(--muted);}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-links a{font-size:13px;font-weight:500;color:var(--muted);padding:8px 12px;border-radius:9px;text-decoration:none;transition:.2s;white-space:nowrap;font-family:'Sora',sans-serif;cursor:pointer;}
+.nav-links a:hover,.nav-links a.active{color:var(--primary);background:var(--primary-light);}
+.nav-links a.active{font-weight:700;}
+.nav-dropdown{position:relative;}
+.dropdown-menu{
+  position:absolute;top:calc(100% + 8px);left:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);box-shadow:var(--sh-lg);
+  min-width:230px;padding:8px;
+  opacity:0;pointer-events:none;transform:translateY(-8px);
+  transition:.2s;z-index:10;
+}
+.nav-dropdown:hover .dropdown-menu{opacity:1;pointer-events:all;transform:translateY(0);}
+.dropdown-menu a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;font-size:13px;color:var(--text);text-decoration:none;transition:.15s;font-weight:500;}
+.dropdown-menu a:hover{background:var(--primary-light);color:var(--primary);}
+.d-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.dd-cs{margin-left:auto;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:100px;flex-shrink:0;}
+
+/* Masuk button */
+.btn-masuk{
+  display:flex;align-items:center;gap:7px;
+  background:linear-gradient(135deg,#0f6fba,#0a4f8a);
+  color:#fff;border:none;border-radius:10px;
+  padding:9px 18px;font-size:13px;font-weight:700;
+  font-family:'Sora',sans-serif;cursor:pointer;
+  box-shadow:0 3px 12px rgba(15,111,186,.28);
+  transition:.2s;flex-shrink:0;margin-left:10px;
+}
+.btn-masuk:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,111,186,.4);}
+
+/* Hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;margin-left:6px;}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s;}
+@media(max-width:900px){
+  .nav-links{display:none;flex-direction:column;position:fixed;top:var(--nav-h);left:0;right:0;background:#fff;border-bottom:1px solid var(--border);padding:14px;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.08);z-index:800;}
+  .nav-links.open{display:flex;}
+  .nav-links .dropdown-menu{position:static;box-shadow:none;border:none;opacity:1;pointer-events:all;transform:none;padding-left:16px;background:#f8fafc;}
+  .hamburger{display:flex;}
+}
+
+/* ══ PAGES ══ */
+.page{display:none;padding-top:var(--nav-h);animation:fadeUp .35s ease both;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══ HERO ══ */
+.hero{min-height:calc(100vh - var(--nav-h));background:linear-gradient(135deg,#0a4f8a,#0f6fba 50%,#0d9488);display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");}
+.hero-content{position:relative;z-index:1;max-width:720px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:600;letter-spacing:.06em;padding:7px 18px;border-radius:100px;margin-bottom:24px;text-transform:uppercase;}
+.hero h1{font-family:'Sora',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:20px;}
+.hero h1 em{font-style:normal;color:#7dd3c8;}
+.hero p{font-size:16px;color:rgba(255,255,255,.82);max-width:520px;margin:0 auto 36px;line-height:1.7;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:12px;font-size:14px;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;border:none;text-decoration:none;transition:.2s;}
+.btn-white{background:#fff;color:var(--primary);}
+.btn-white:hover{background:#e0f0ff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15);}
+.btn-outline{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.4);}
+.btn-outline:hover{background:rgba(255,255,255,.22);transform:translateY(-2px);}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:var(--sh-lg);}
+
+/* Stats */
+.stats-bar{background:var(--surface);border-top:1px solid var(--border);padding:28px 40px;display:flex;justify-content:center;flex-wrap:wrap;}
+.stat-item{text-align:center;padding:0 40px;border-right:1px solid var(--border);}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--primary);}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px;}
+@media(max-width:480px){.stats-bar{flex-direction:column;gap:20px;padding:24px;}.stat-item{border-right:none;border-bottom:1px solid var(--border);padding-bottom:16px;}.stat-item:last-child{border-bottom:none;}}
+
+/* ══ SECTION ══ */
+.section{padding:72px 24px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-tag{display:inline-flex;align-items:center;gap:6px;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:14px;}
+.section-title{font-family:'Sora',sans-serif;font-size:clamp(24px,3.5vw,36px);font-weight:800;line-height:1.2;margin-bottom:10px;}
+.section-desc{color:var(--muted);font-size:15px;max-width:560px;line-height:1.7;}
+.flex-between{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.text-center{text-align:center;}
+.mt-16{margin-top:16px;}.mt-24{margin-top:24px;}.mt-40{margin-top:40px;}
+
+/* ══ CARDS ══ */
+.cards-grid{display:grid;gap:20px;margin-top:40px;}
+.cards-grid.col3{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));}
+.cards-grid.col2{grid-template-columns:repeat(auto-fill,minmax(400px,1fr));}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--sh);transition:.25s;}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg);border-color:var(--primary-light);}
+.card-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px;}
+.card h3{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px;}
+.card p{font-size:14px;color:var(--muted);line-height:1.65;}
+.card-tag{display:inline-block;margin-top:14px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;}
+
+/* ══ LAYANAN HERO ══ */
+.page-hero{padding:56px 24px;text-align:center;}
+.page-hero h2{font-family:'Sora',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;color:#fff;margin-bottom:12px;}
+.page-hero p{color:rgba(255,255,255,.8);font-size:15px;max-width:500px;margin:0 auto;}
+
+/* Service cards */
+.service-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--sh);transition:.25s;display:flex;flex-direction:column;}
+.service-card:hover{transform:translateY(-5px);box-shadow:var(--sh-lg);}
+.service-card-header{padding:28px 28px 20px;display:flex;align-items:center;gap:16px;}
+.service-card-icon{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.service-card-header h3{font-family:'Sora',sans-serif;font-size:19px;font-weight:700;}
+.service-card-header span{font-size:13px;color:var(--muted);}
+.service-card-body{padding:0 28px 28px;flex:1;}
+.service-card-body p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.feature-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.feature-list li{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;}
+.feature-list li::before{content:'✓';color:var(--teal);font-weight:700;font-size:14px;}
+.service-card-footer{padding:16px 28px;border-top:1px solid var(--border);background:#fafbfc;}
+.read-more{font-size:13px;font-weight:600;color:var(--primary);text-decoration:none;cursor:pointer;}
+
+/* ══ PORTO ══ */
+.porto-tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap;}
+.porto-tab{padding:9px 20px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:.2s;font-family:'Sora',sans-serif;}
+.porto-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.porto-tab:hover:not(.active){border-color:var(--primary);color:var(--primary);}
+.porto-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:.25s;}
+.porto-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg);}
+.porto-thumb{height:160px;display:flex;align-items:center;justify-content:center;font-size:48px;}
+.porto-body{padding:20px;}
+.porto-body h4{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;}
+.porto-body p{font-size:13px;color:var(--muted);line-height:1.6;}
+.porto-meta{display:flex;align-items:center;justify-content:space-between;margin-top:14px;}
+.porto-author{font-size:12px;color:var(--muted);}
+.porto-year{font-size:11px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:3px 10px;border-radius:100px;}
+
+/* ══ ARTIKEL ══ */
+.artikel-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:.25s;}
+.artikel-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg);}
+.artikel-thumb{height:180px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;}
+.artikel-cat{position:absolute;top:12px;left:12px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;}
+.artikel-body{padding:20px;}
+.artikel-body h4{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px;line-height:1.4;}
+.artikel-body p{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:14px;}
+.artikel-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);}
+
+/* ══ TIM ══ */
+.tim-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;text-align:center;box-shadow:var(--sh);transition:.25s;}
+.tim-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg);}
+.tim-avatar{width:80px;height:80px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:36px;border:3px solid var(--primary-light);}
+.tim-card h4{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;}
+.tim-card .role{font-size:13px;color:var(--primary);font-weight:600;margin-bottom:8px;}
+.tim-card p{font-size:13px;color:var(--muted);line-height:1.6;}
+.tim-div{width:40px;height:3px;background:var(--primary);border-radius:2px;margin:12px auto;}
+
+/* ══ GALERI ══ */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:36px;}
+.gallery-item{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);cursor:pointer;position:relative;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;transition:.25s;}
+.gallery-item:hover{transform:scale(1.03);box-shadow:var(--sh-lg);}
+.g-overlay{position:absolute;inset:0;background:rgba(15,111,186,.72);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:.25s;color:#fff;text-align:center;padding:16px;}
+.gallery-item:hover .g-overlay{opacity:1;}
+.g-overlay h5{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;}
+.g-overlay p{font-size:12px;opacity:.85;margin-top:4px;}
+
+/* ══ KONTAK ══ */
+.contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:32px;margin-top:48px;}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr;}}
+.contact-info{background:linear-gradient(135deg,#0a4f8a,#0f6fba);border-radius:18px;padding:36px;color:#fff;}
+.contact-info h3{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.contact-info p{font-size:14px;opacity:.8;margin-bottom:28px;line-height:1.6;}
+.ci{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.ci-icon{width:40px;height:40px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ci strong{display:block;font-size:13px;font-weight:600;margin-bottom:2px;}
+.ci span{font-size:13px;opacity:.75;}
+.contact-form{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:36px;box-shadow:var(--sh);}
+.contact-form h3{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;margin-bottom:24px;}
+.fg{margin-bottom:18px;}
+.fg label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--surface);outline:none;transition:border .2s;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--primary);}
+.fg textarea{resize:vertical;min-height:120px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:480px){.form-row{grid-template-columns:1fr;}}
+
+/* ══ ABOUT ══ */
+.vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;}
+@media(max-width:640px){.vm-grid{grid-template-columns:1fr;}}
+.vm-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--sh);}
+.vm-card h4{font-family:'Sora',sans-serif;font-size:18px;font-weight:700;margin-bottom:12px;}
+.vm-card p,.vm-card li{font-size:14px;color:var(--muted);line-height:1.7;}
+.vm-card ul{padding-left:18px;display:flex;flex-direction:column;gap:6px;}
+@media(max-width:680px){.about-intro-grid{grid-template-columns:1fr!important;}.about-img{display:none!important;}}
+
+/* ══ FOOTER ══ */
+footer{background:var(--text);color:rgba(255,255,255,.6);padding:48px 24px 24px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr 1fr;gap:28px;}}
+@media(max-width:480px){.footer-top{grid-template-columns:1fr;}}
+.footer-brand strong{font-family:'Sora',sans-serif;font-size:15px;color:#fff;display:block;margin-bottom:8px;}
+.footer-brand p{font-size:13px;line-height:1.65;max-width:280px;}
+.fcol h5{font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:14px;letter-spacing:.06em;text-transform:uppercase;}
+.fcol a{display:block;font-size:13px;margin-bottom:8px;color:rgba(255,255,255,.5);text-decoration:none;cursor:pointer;transition:.15s;}
+.fcol a:hover{color:#fff;}
+.footer-bot{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.footer-bot span{font-size:12px;}
+
+/* ══ NOTIF ══ */
+.notif{position:fixed;bottom:24px;right:24px;z-index:9998;background:var(--primary);color:#fff;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:500;font-family:'Sora',sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.18);transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);max-width:300px;display:flex;align-items:center;gap:8px;}
+.notif.show{transform:translateY(0);opacity:1;}
+
+/* ══ COMING SOON ══ */
+.cs-wrapper{position:relative;overflow:hidden;}
+.cs-overlay{position:absolute;inset:0;background:rgba(255,255,255,.52);backdrop-filter:blur(2px);border-radius:inherit;display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none;}
+.cs-inner{display:flex;flex-direction:column;align-items:center;gap:6px;background:rgba(255,255,255,.92);border:1.5px solid #fed7aa;border-radius:14px;padding:14px 24px;box-shadow:0 4px 24px rgba(249,115,22,.18);}
+.cs-inner .cs-ico{font-size:26px;}
+.cs-inner .cs-lbl{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#ea580c;letter-spacing:.04em;text-transform:uppercase;}
+.cs-inner .cs-sub{font-size:11px;color:#92400e;}
+@keyframes cs-pulse{0%,100%{box-shadow:0 2px 8px rgba(249,115,22,.3);}50%{box-shadow:0 4px 16px rgba(249,115,22,.55);}}
+
+/* ══ LOGIN MODAL ══ */
+.lbdrop{
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(8,18,38,.6);backdrop-filter:blur(7px);
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.lbdrop.open{opacity:1;pointer-events:all;}
+.lmodal{
+  display:flex;width:100%;max-width:880px;min-height:580px;
+  background:var(--surface);border-radius:24px;overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,.28);
+  transform:translateY(28px) scale(.96);
+  transition:transform .38s cubic-bezier(.34,1.3,.64,1);
+}
+.lbdrop.open .lmodal{transform:translateY(0) scale(1);}
+
+/* Left panel */
+.lpanel{
+  width:300px;flex-shrink:0;
+  background:linear-gradient(160deg,#0a4f8a 0%,#0f6fba 55%,#0d9488 100%);
+  padding:40px 28px;display:flex;flex-direction:column;position:relative;overflow:hidden;
+}
+.lpanel::before{content:'';position:absolute;top:-70px;right:-70px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.lpanel::after{content:'';position:absolute;bottom:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.05);}
+.lpanel-logo{width:54px;height:54px;background:rgba(255,255,255,.18);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:22px;position:relative;z-index:1;}
+.lpanel h2{font-family:'Sora',sans-serif;font-size:19px;font-weight:800;color:#fff;line-height:1.3;margin-bottom:10px;position:relative;z-index:1;}
+.lpanel > p{font-size:12.5px;color:rgba(255,255,255,.72);line-height:1.7;margin-bottom:24px;position:relative;z-index:1;}
+.lpanel-feats{display:flex;flex-direction:column;gap:9px;position:relative;z-index:1;flex:1;}
+.lpf{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border-radius:10px;padding:9px 13px;font-size:12.5px;color:#fff;font-weight:500;}
+.lpanel-foot{position:relative;z-index:1;margin-top:22px;font-size:11px;color:rgba(255,255,255,.45);font-family:'Sora',sans-serif;letter-spacing:.05em;}
+
+/* Right panel */
+.lright{flex:1;padding:32px 36px;overflow-y:auto;position:relative;}
+.lclose{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.lclose:hover{background:#fee2e2;color:#dc2626;}
+
+/* Tabs */
+.ltabs{display:flex;background:var(--bg);border-radius:10px;padding:4px;gap:4px;margin-bottom:22px;width:fit-content;}
+.ltab{padding:8px 26px;border-radius:8px;border:none;background:transparent;font-size:13px;font-weight:700;color:var(--muted);font-family:'Sora',sans-serif;cursor:pointer;transition:.2s;}
+.ltab.active{background:var(--surface);color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+
+/* Welcome */
+.lwelcome{margin-bottom:18px;}
+.lwelcome .lwave{font-size:30px;margin-bottom:6px;}
+.lwelcome h3{font-family:'Sora',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px;}
+.lwelcome p{font-size:13px;color:var(--muted);}
+
+/* Role picker */
+.lroles{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.lrole{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 13px;border-radius:12px;border:2px solid var(--border);background:var(--surface);cursor:pointer;transition:.2s;font-size:12px;font-weight:700;color:var(--muted);min-width:62px;}
+.lrole:hover{border-color:var(--primary);color:var(--primary);}
+.lrole.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary);}
+.lrole-ico{font-size:20px;}
+
+/* Form group */
+.lfg{margin-bottom:15px;}
+.lfg label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;letter-spacing:.02em;}
+.liw{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);transition:border .2s;}
+.liw:focus-within{border-color:var(--primary);}
+.li-ico{padding:0 11px;font-size:16px;flex-shrink:0;}
+.liw input{flex:1;border:none;outline:none;padding:11px 0;font-size:14px;font-family:'DM Sans',sans-serif;background:transparent;color:var(--text);}
+.ltoggle{padding:0 11px;font-size:15px;cursor:pointer;flex-shrink:0;opacity:.6;}
+.ltoggle:hover{opacity:1;}
+
+/* Checkbox & forgot */
+.lchk{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--muted);}
+.lchk input{width:15px;height:15px;accent-color:var(--primary);}
+.lfgt{font-size:12px;color:var(--primary);font-weight:600;cursor:pointer;}
+.lfgt:hover{text-decoration:underline;}
+
+/* Submit */
+.lsubmit{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:13px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#0f6fba,#0a4f8a);
+  color:#fff;font-size:15px;font-weight:700;font-family:'Sora',sans-serif;
+  cursor:pointer;box-shadow:0 4px 16px rgba(15,111,186,.28);transition:.25s;
+}
+.lsubmit:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(15,111,186,.4);}
+.lsubmit .larr{font-size:18px;transition:transform .2s;}
+.lsubmit:hover .larr{transform:translateX(5px);}
+
+/* Divider */
+.ldiv{display:flex;align-items:center;gap:12px;margin:18px 0;font-size:12px;color:var(--muted);}
+.ldiv::before,.ldiv::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* Social */
+.lsoc{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lsoc-btn{padding:10px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);transition:.2s;font-family:'DM Sans',sans-serif;}
+.lsoc-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
+
+/* Password strength */
+.pstr{height:4px;border-radius:2px;margin-top:6px;background:var(--border);overflow:hidden;display:none;}
+.pstr-bar{height:100%;border-radius:2px;width:0;transition:width .3s,background .3s;}
+
+/* Mobile modal */
+@media(max-width:680px){
+  .lmodal{flex-direction:column;max-height:92vh;overflow-y:auto;}
+  .lpanel{width:100%;padding:22px 22px 18px;min-height:auto;}
+  .lpanel h2{font-size:16px;}
+  .lpanel-feats,.lpanel-foot{display:none;}
+  .lright{padding:22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <a class="nav-brand" onclick="showPage('beranda')">
+    <div class="nav-logo">🏥</div>
+    <div class="nav-brand-text">
+      <strong>Portal Kesehatan</strong>
+      <span>PSDKU MIK Ngawi</span>
+    </div>
+  </a>
+
+  <div class="nav-links" id="navLinks">
+    <a onclick="showPage('beranda')" class="active" id="nav-beranda">Beranda</a>
+    <a onclick="showPage('tentang')" id="nav-tentang">Tentang Kami</a>
+
+    <div class="nav-dropdown">
+      <a id="nav-layanan">Layanan ▾</a>
+      <div class="dropdown-menu">
+        <a onclick="showPage('utilisasi')"><div class="d-icon" style="background:#ccfbf1;">⭐</div>Utilisasi Review</a>
+        <a onclick="showPage('predictive')"><div class="d-icon" style="background:#dbeafe;">📈</div>Predictive Tempat Tidur<span class="dd-cs">Soon</span></a>
+        <a onclick="showPage('deteksi')"><div class="d-icon" style="background:#dcfce7;">🛡️</div>Deteksi Dini Penyakit Tropis<span class="dd-cs">Soon</span></a>
+      </div>
+    </div>
+
+    <div class="nav-dropdown">
+      <a id="nav-portofolio">Portofolio ▾</a>
+      <div class="dropdown-menu">
+        <a onclick="showPage('research')"><div class="d-icon" style="background:#fff7ed;">🤝</div>Research &amp; Project Collaboration</a>
+        <a onclick="showPage('produk')"><div class="d-icon" style="background:#f3e8ff;">🎓</div>Produk Mahasiswa</a>
+      </div>
+    </div>
+
+    <a onclick="showPage('artikel')" id="nav-artikel">Artikel</a>
+    <a onclick="showPage('tim')" id="nav-tim">Tim</a>
+    <a onclick="showPage('galeri')" id="nav-galeri">Galeri</a>
+    <a onclick="showPage('hubungi')" id="nav-hubungi">Hubungi Kami</a>
+  </div>
+
+  <button class="btn-masuk" onclick="openLogin()">🔐 Masuk</button>
+  <div class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ══ LOGIN MODAL ══ -->
+<div class="lbdrop" id="lbdrop" onclick="bdropClick(event)">
+  <div class="lmodal" id="lmodal">
+
+    <!-- Left Branding -->
+    <div class="lpanel">
+      <div class="lpanel-logo">🏥</div>
+      <h2>Portal Pusat Data &amp; Analisis Kesehatan</h2>
+      <p>Platform inovasi teknologi informasi kesehatan TEFA PSDKU MIK Ngawi.</p>
+      <div class="lpanel-feats">
+        <div class="lpf"><span>📊</span> Utilisasi Review</div>
+        <div class="lpf"><span>📈</span> Predictive Analytics</div>
+        <div class="lpf"><span>🛡️</span> Deteksi Dini Penyakit</div>
+        <div class="lpf"><span>💼</span> Portofolio Mahasiswa</div>
+        <div class="lpf"><span>📰</span> Artikel &amp; Riset</div>
+      </div>
+      <div class="lpanel-foot">TEFA · PSDKU MIK Ngawi · 2025</div>
+    </div>
+
+    <!-- Right Form -->
+    <div class="lright">
+      <button class="lclose" onclick="closeLogin()">✕</button>
+
+      <div class="ltabs">
+        <button class="ltab active" onclick="switchTab('masuk',this)">Masuk</button>
+        <button class="ltab" onclick="switchTab('daftar',this)">Daftar</button>
+      </div>
+
+      <!-- ── FORM MASUK ── -->
+      <div id="fm-masuk">
+        <div class="lwelcome">
+          <div class="lwave">👋</div>
+          <h3>Selamat Datang Kembali!</h3>
+          <p>Masuk untuk mengakses layanan portal kesehatan.</p>
+        </div>
+
+        <div class="lfg">
+          <label>Peran Pengguna</label>
+          <div class="lroles">
+            <div class="lrole active" onclick="pickRole(this)"><span class="lrole-ico">🎓</span>Mahasiswa</div>
+            <div class="lrole" onclick="pickRole(this)"><span class="lrole-ico">👨‍🏫</span>Dosen</div>
+            <div class="lrole" onclick="pickRole(this)"><span class="lrole-ico">⚙️</span>Admin</div>
+            <div class="lrole" onclick="pickRole(this)"><span class="lrole-ico">🤝</span>Mitra</div>
+          </div>
+        </div>
+
+        <div class="lfg">
+          <label>Email / NIM</label>
+          <div class="liw">
+            <span class="li-ico">✉️</span>
+            <input id="l-email" type="text" placeholder="email@contoh.com atau NIM">
+          </div>
+        </div>
+
+        <div class="lfg">
+          <label>Password</label>
+          <div class="liw">
+            <span class="li-ico">🔒</span>
+            <input id="l-pass" type="password" placeholder="Masukkan password">
+            <span class="ltoggle" onclick="togglePass('l-pass',this)">👁</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <label class="lchk"><input type="checkbox"><span style="margin-left:4px;">Ingat saya</span></label>
+          <a class="lfgt" onclick="showNotif('📧 Link reset dikirim ke email Anda!')">Lupa password?</a>
+        </div>
+
+        <button class="lsubmit" onclick="doLogin()">
+          <span id="l-btn-txt">Masuk ke Portal</span>
+          <span class="larr">→</span>
+        </button>
+
+        <div class="ldiv"><span>atau masuk dengan</span></div>
+        <div class="lsoc">
+          <button class="lsoc-btn" onclick="showNotif('🌐 Login Google segera tersedia!')">🌐 Google</button>
+          <button class="lsoc-btn" onclick="showNotif('🏫 Login SSO segera tersedia!')">🏫 SSO Kampus</button>
+        </div>
+      </div>
+
+      <!-- ── FORM DAFTAR ── -->
+      <div id="fm-daftar" style="display:none;">
+        <div class="lwelcome">
+          <div class="lwave">🌱</div>
+          <h3>Buat Akun Baru</h3>
+          <p>Bergabung dan mulai berkontribusi bersama kami.</p>
+        </div>
+
+        <div class="lfg">
+          <label>Peran</label>
+          <div class="lroles">
+            <div class="lrole active" onclick="pickRole(this)"><span class="lrole-ico">🎓</span>Mahasiswa</div>
+            <div class="lrole" onclick="pickRole(this)"><span class="lrole-ico">👨‍🏫</span>Dosen</div>
+            <div class="lrole" onclick="pickRole(this)"><span class="lrole-ico">🤝</span>Mitra</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="lfg">
+            <label>Nama Depan</label>
+            <div class="liw"><span class="li-ico">👤</span><input type="text" placeholder="Nama depan"></div>
+          </div>
+          <div class="lfg">
+            <label>Nama Belakang</label>
+            <div class="liw"><span class="li-ico">👤</span><input type="text" placeholder="Nama belakang"></div>
+          </div>
+        </div>
+
+        <div class="lfg">
+          <label>NIM / NIP / ID Mitra</label>
+          <div class="liw"><span class="li-ico">🪪</span><input type="text" placeholder="Masukkan NIM / NIP / ID"></div>
+        </div>
+
+        <div class="lfg">
+          <label>Email Institusi</label>
+          <div class="liw"><span class="li-ico">✉️</span><input type="email" placeholder="email@contoh.com"></div>
+        </div>
+
+        <div class="lfg">
+          <label>Password</label>
+          <div class="liw">
+            <span class="li-ico">🔒</span>
+            <input id="r-pass" type="password" placeholder="Min. 8 karakter" oninput="checkStrength(this)">
+            <span class="ltoggle" onclick="togglePass('r-pass',this)">👁</span>
+          </div>
+          <div class="pstr" id="pstr"><div class="pstr-bar" id="pstr-bar"></div></div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label class="lchk"><input type="checkbox"><span style="margin-left:4px;">Saya menyetujui <u style="color:var(--primary);cursor:pointer;">Syarat &amp; Ketentuan</u></span></label>
+        </div>
+
+        <button class="lsubmit" style="background:linear-gradient(135deg,#0d9488,#0f6fba);" onclick="doRegister()">
+          <span>Daftar Sekarang</span>
+          <span class="larr">→</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ PAGE: BERANDA ══ -->
+<div class="page active" id="page-beranda">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">🏥 TEFA PSDKU MIK Ngawi</div>
+      <h1>Pusat Data &amp; <em>Analisis Kesehatan</em> Digital</h1>
+      <p>Platform terpadu pengelolaan, analisis, dan visualisasi data kesehatan berbasis teknologi informasi terkini.</p>
+      <div class="hero-btns">
+        <button class="btn btn-white" onclick="showPage('layanan')">Jelajahi Layanan</button>
+        <button class="btn btn-outline" onclick="showPage('tentang')">Tentang Kami</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">3+</div><div class="stat-label">Layanan Analitik</div></div>
+    <div class="stat-item"><div class="stat-num">50+</div><div class="stat-label">Proyek Mahasiswa</div></div>
+    <div class="stat-item"><div class="stat-num">12+</div><div class="stat-label">Kolaborasi Riset</div></div>
+    <div class="stat-item"><div class="stat-num">200+</div><div class="stat-label">Artikel Kesehatan</div></div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="flex-between">
+        <div>
+          <div class="section-tag">🔬 Layanan Unggulan</div>
+          <h2 class="section-title">Solusi Analisis Kesehatan<br>Berbasis Data</h2>
+          <p class="section-desc">Tiga layanan utama mendukung pengambilan keputusan klinis dan manajemen kesehatan berbasis bukti.</p>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('layanan')">Lihat Semua</button>
+      </div>
+      <div class="cards-grid col3">
+        <div class="card" onclick="showPage('utilisasi')" style="cursor:pointer;">
+          <div class="card-icon" style="background:var(--teal-light);">⭐</div>
+          <h3>Utilisasi Review</h3>
+          <p>Analisis pemanfaatan layanan kesehatan untuk efisiensi dan peningkatan kualitas pelayanan.</p>
+          <div class="card-tag" style="background:var(--teal-light);color:var(--teal);">Analitik & Klinis</div>
+        </div>
+        <div class="card cs-wrapper" onclick="showPage('predictive')" style="cursor:pointer;">
+          <div class="cs-overlay"><div class="cs-inner"><div class="cs-ico">🚧</div><div class="cs-lbl">Coming Soon</div><div class="cs-sub">Segera hadir</div></div></div>
+          <div class="card-icon" style="background:var(--primary-light);">📈</div>
+          <h3>Predictive Tempat Tidur</h3>
+          <p>Prediksi kebutuhan tempat tidur RS menggunakan model machine learning untuk perencanaan kapasitas.</p>
+          <div class="card-tag" style="background:var(--primary-light);color:var(--primary);">Prediktif & AI</div>
+        </div>
+        <div class="card cs-wrapper" onclick="showPage('deteksi')" style="cursor:pointer;">
+          <div class="cs-overlay"><div class="cs-inner"><div class="cs-ico">🚧</div><div class="cs-lbl">Coming Soon</div><div class="cs-sub">Segera hadir</div></div></div>
+          <div class="card-icon" style="background:#dcfce7;">🛡️</div>
+          <h3>Deteksi Dini Penyakit Tropis</h3>
+          <p>Sistem peringatan dini penyakit tropis berbasis surveilans data epidemiologi wilayah.</p>
+          <div class="card-tag" style="background:#dcfce7;color:#16a34a;">Surveilans</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--surface);border-top:1px solid var(--border);">
+    <div class="section-inner text-center">
+      <div class="section-tag" style="margin:0 auto 14px;">📰 Artikel Terbaru</div>
+      <h2 class="section-title">Informasi &amp; Edukasi Kesehatan</h2>
+      <p class="section-desc" style="margin:0 auto 40px;">Artikel dan berita kesehatan terkini dari tim peneliti dan praktisi MIK Ngawi.</p>
+      <div class="cards-grid col3">
+        <div class="card" style="text-align:left;">
+          <div style="font-size:36px;margin-bottom:12px;">🦟</div>
+          <h3 style="font-size:15px;">Tren Kasus DBD di Kabupaten Ngawi 2025</h3>
+          <p>Analisis pola musiman kejadian demam berdarah dengue dan implikasinya terhadap sistem deteksi dini…</p>
+          <div class="card-tag" style="background:var(--teal-light);color:var(--teal);">Epidemiologi</div>
+        </div>
+        <div class="card" style="text-align:left;">
+          <div style="font-size:36px;margin-bottom:12px;">🤖</div>
+          <h3 style="font-size:15px;">Implementasi AI dalam Manajemen Rawat Inap</h3>
+          <p>Penerapan model prediktif machine learning untuk optimasi kapasitas tempat tidur di RS tipe C…</p>
+          <div class="card-tag" style="background:var(--primary-light);color:var(--primary);">Teknologi</div>
+        </div>
+        <div class="card" style="text-align:left;">
+          <div style="font-size:36px;margin-bottom:12px;">📊</div>
+          <h3 style="font-size:15px;">Dashboard Interaktif Data Kesehatan Daerah</h3>
+          <p>Pengembangan sistem visualisasi data kesehatan berbasis web untuk mendukung pengambilan keputusan…</p>
+          <div class="card-tag" style="background:#fff7ed;color:var(--orange);">Data & Informasi</div>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-40" onclick="showPage('artikel')">Baca Semua Artikel</button>
+    </div>
+  </section>
+</div>
+
+<!-- ══ PAGE: TENTANG ══ -->
+<div class="page" id="page-tentang">
+
+  <!-- Hero -->
+  <div class="page-hero" style="background:linear-gradient(135deg,#7c3aed,#0f6fba);padding:64px 24px;">
+    <h2>Tentang Kami</h2>
+    <p>Embrio TEFA PSDKU MIK Ngawi — mendorong inovasi berbasis data untuk transformasi kesehatan yang lebih baik.</p>
+  </div>
+
+  <!-- Intro strip -->
+  <section style="background:var(--surface);border-bottom:1px solid var(--border);padding:48px 24px;">
+    <div class="section-inner">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;" class="about-intro-grid">
+        <div>
+          <div class="section-tag">🌱 Siapa Kami</div>
+          <h2 class="section-title">Web Portal Pusat Data &amp;<br>Analisis Kesehatan</h2>
+          <p style="color:var(--muted);line-height:1.8;font-size:15px;margin-top:12px;">Platform digital yang dikembangkan oleh Program Studi Manajemen Informasi Kesehatan (MIK) PSDKU Ngawi dalam program Teaching Factory (TEFA). Kami mengintegrasikan ilmu data, teknologi informasi, dan kesehatan untuk menghasilkan solusi yang berdampak nyata.</p>
+          <div style="display:flex;gap:14px;margin-top:24px;flex-wrap:wrap;">
+            <div style="text-align:center;background:var(--primary-light);padding:14px 22px;border-radius:12px;"><div style="font-size:22px;font-weight:800;color:var(--primary);font-family:'Sora',sans-serif;">2022</div><div style="font-size:12px;color:var(--muted);">Tahun Berdiri</div></div>
+            <div style="text-align:center;background:var(--teal-light);padding:14px 22px;border-radius:12px;"><div style="font-size:22px;font-weight:800;color:var(--teal);font-family:'Sora',sans-serif;">MIK</div><div style="font-size:12px;color:var(--muted);">Program Studi</div></div>
+            <div style="text-align:center;background:#fff7ed;padding:14px 22px;border-radius:12px;"><div style="font-size:22px;font-weight:800;color:var(--orange);font-family:'Sora',sans-serif;">TEFA</div><div style="font-size:12px;color:var(--muted);">Model Pembelajaran</div></div>
+            <div style="text-align:center;background:#f3e8ff;padding:14px 22px;border-radius:12px;"><div style="font-size:22px;font-weight:800;color:#7c3aed;font-family:'Sora',sans-serif;">4</div><div style="font-size:12px;color:var(--muted);">Fokus Bidang</div></div>
+          </div>
+        </div>
+        <div class="about-img" style="background:linear-gradient(135deg,#e0f0ff,#f3e8ff);border-radius:20px;height:280px;display:flex;align-items:center;justify-content:center;font-size:88px;">🏥</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 Fokus Bidang -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="text-center" style="margin-bottom:48px;">
+        <div class="section-tag" style="margin:0 auto 14px;">🎯 Fokus Bidang</div>
+        <h2 class="section-title">Empat Pilar Keahlian Kami</h2>
+        <p class="section-desc" style="margin:0 auto;">Seluruh aktivitas kami berpusat pada empat bidang utama yang saling melengkapi untuk mendorong transformasi kesehatan berbasis data.</p>
+      </div>
+
+      <!-- Card 1: Data Science -->
+      <div class="about-focus-card" style="display:grid;grid-template-columns:80px 1fr;gap:28px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px;box-shadow:var(--sh);margin-bottom:20px;transition:.25s;" onmouseover="this.style.boxShadow='var(--sh-lg)';this.style.borderColor='#bfdbfe'" onmouseout="this.style.boxShadow='var(--sh)';this.style.borderColor='var(--border)'">
+        <div style="width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;">🧪</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+            <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;">Data Science</h3>
+            <span style="font-size:11px;font-weight:700;background:var(--primary-light);color:var(--primary);padding:3px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;">Inti</span>
+          </div>
+          <p style="color:var(--muted);font-size:14px;line-height:1.75;margin-bottom:16px;">Penerapan ilmu data science dalam konteks kesehatan — mulai dari pengumpulan, pembersihan, eksplorasi, hingga pemodelan data klinis dan epidemiologis untuk menghasilkan insight yang actionable bagi tenaga kesehatan dan pengambil kebijakan.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">📊 Statistik Kesehatan</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🤖 Machine Learning</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">📈 Visualisasi Data</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🔍 Analisis Prediktif</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Konsultan Data Kesehatan -->
+      <div class="about-focus-card" style="display:grid;grid-template-columns:80px 1fr;gap:28px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px;box-shadow:var(--sh);margin-bottom:20px;transition:.25s;" onmouseover="this.style.boxShadow='var(--sh-lg)';this.style.borderColor='#a7f3d0'" onmouseout="this.style.boxShadow='var(--sh)';this.style.borderColor='var(--border)'">
+        <div style="width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,#ccfbf1,#a7f3d0);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;">🩺</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+            <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;">Konsultan Data Kesehatan</h3>
+            <span style="font-size:11px;font-weight:700;background:var(--teal-light);color:var(--teal);padding:3px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;">Layanan</span>
+          </div>
+          <p style="color:var(--muted);font-size:14px;line-height:1.75;margin-bottom:16px;">Memberikan layanan konsultasi profesional kepada fasilitas kesehatan, dinas kesehatan, dan organisasi terkait dalam pengelolaan, analisis, dan pemanfaatan data kesehatan secara optimal — dari audit data rekam medis hingga perancangan sistem pelaporan.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">📋 Audit Data Klinis</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🏥 Manajemen SIMRS</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">📑 Pelaporan INA-CBGs</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">✅ Akreditasi Data</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Big Data -->
+      <div class="about-focus-card" style="display:grid;grid-template-columns:80px 1fr;gap:28px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px;box-shadow:var(--sh);margin-bottom:20px;transition:.25s;" onmouseover="this.style.boxShadow='var(--sh-lg)';this.style.borderColor='#fed7aa'" onmouseout="this.style.boxShadow='var(--sh)';this.style.borderColor='var(--border)'">
+        <div style="width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,#fff7ed,#fed7aa);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;">🗄️</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+            <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;">Big Data</h3>
+            <span style="font-size:11px;font-weight:700;background:#fff7ed;color:var(--orange);padding:3px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;">Infrastruktur</span>
+          </div>
+          <p style="color:var(--muted);font-size:14px;line-height:1.75;margin-bottom:16px;">Pengelolaan dan analisis data skala besar di bidang kesehatan — mengintegrasikan data dari berbagai sumber seperti SIMRS, Puskesmas, surveilans epidemiologi, dan sensor IoT kesehatan untuk menghasilkan pemahaman komprehensif tentang kondisi kesehatan masyarakat.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🔗 Integrasi Data</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">⚡ Real-time Analytics</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🗺️ Geospasial Health</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🔒 Data Governance</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Research & Project Collaboration -->
+      <div class="about-focus-card" style="display:grid;grid-template-columns:80px 1fr;gap:28px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:32px;box-shadow:var(--sh);transition:.25s;" onmouseover="this.style.boxShadow='var(--sh-lg)';this.style.borderColor='#ddd6fe'" onmouseout="this.style.boxShadow='var(--sh)';this.style.borderColor='var(--border)'">
+        <div style="width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;">🤝</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+            <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;">Research &amp; Project Collaboration</h3>
+            <span style="font-size:11px;font-weight:700;background:#ede9fe;color:#7c3aed;padding:3px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;">Kolaborasi</span>
+          </div>
+          <p style="color:var(--muted);font-size:14px;line-height:1.75;margin-bottom:16px;">Mendorong kolaborasi riset multidisiplin antara mahasiswa, dosen, dan mitra eksternal — rumah sakit, puskesmas, dinas kesehatan, hingga institusi akademik nasional — untuk menghasilkan karya ilmiah, prototipe, dan produk teknologi yang aplikatif dan berdampak.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🔬 Riset Terapan</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">📄 Publikasi Ilmiah</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🏗️ Prototipe Produk</div>
+            <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:500;border:1px solid var(--border);">🌐 Kemitraan MoU</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Visi Misi -->
+  <section class="section" style="background:var(--surface);border-top:1px solid var(--border);padding-top:56px;padding-bottom:56px;">
+    <div class="section-inner">
+      <div class="text-center" style="margin-bottom:36px;">
+        <div class="section-tag" style="margin:0 auto 14px;">🧭 Arah Kami</div>
+        <h2 class="section-title">Visi &amp; Misi</h2>
+      </div>
+      <div class="vm-grid">
+        <div class="vm-card" style="border-top:4px solid var(--primary);">
+          <h4>🎯 Visi</h4>
+          <p>Menjadi pusat unggulan data science kesehatan yang inovatif, kolaboratif, dan berdampak nyata bagi masyarakat melalui pemanfaatan big data dan teknologi informasi kesehatan terkini.</p>
+        </div>
+        <div class="vm-card" style="border-top:4px solid var(--teal);">
+          <h4>🚀 Misi</h4>
+          <ul>
+            <li>Mengembangkan kapabilitas data science di bidang kesehatan</li>
+            <li>Memberikan layanan konsultasi data kesehatan yang profesional</li>
+            <li>Membangun infrastruktur big data kesehatan yang andal</li>
+            <li>Mendorong ekosistem riset dan kolaborasi multidisiplin</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══ PAGE: LAYANAN ══ -->
+<div class="page" id="page-layanan">
+  <div class="page-hero" style="background:linear-gradient(135deg,#0d9488,#0f6fba);">
+    <h2>Layanan Kami</h2>
+    <p>Tiga layanan analitik kesehatan berbasis data untuk mendukung pengambilan keputusan di fasilitas kesehatan.</p>
+  </div>
+  <section class="section"><div class="section-inner">
+    <div class="cards-grid col3">
+      <div class="service-card" onclick="showPage('utilisasi')" style="cursor:pointer;">
+        <div class="service-card-header"><div class="service-card-icon" style="background:var(--teal-light);">⭐</div><div><h3>Utilisasi Review</h3><span>Analitik & Klinis</span></div></div>
+        <div class="service-card-body"><p>Analisis mendalam terhadap pola pemanfaatan layanan kesehatan untuk meningkatkan efisiensi operasional.</p></div>
+        <div class="service-card-footer"><span class="read-more">Pelajari lebih →</span></div>
+      </div>
+      <div class="service-card cs-wrapper" onclick="showPage('predictive')" style="cursor:pointer;">
+        <div class="cs-overlay"><div class="cs-inner"><div class="cs-ico">🚧</div><div class="cs-lbl">Coming Soon</div><div class="cs-sub">Sedang dikembangkan</div></div></div>
+        <div class="service-card-header"><div class="service-card-icon" style="background:var(--primary-light);">📈</div><div><h3>Predictive Tempat Tidur</h3><span>Prediktif & AI</span></div></div>
+        <div class="service-card-body"><p>Model prediktif berbasis machine learning untuk perencanaan kapasitas rawat inap rumah sakit.</p></div>
+        <div class="service-card-footer"><span class="read-more">Pelajari lebih →</span></div>
+      </div>
+      <div class="service-card cs-wrapper" onclick="showPage('deteksi')" style="cursor:pointer;">
+        <div class="cs-overlay"><div class="cs-inner"><div class="cs-ico">🚧</div><div class="cs-lbl">Coming Soon</div><div class="cs-sub">Sedang dikembangkan</div></div></div>
+        <div class="service-card-header"><div class="service-card-icon" style="background:#dcfce7;">🛡️</div><div><h3>Deteksi Dini Penyakit Tropis</h3><span>Surveilans</span></div></div>
+        <div class="service-card-body"><p>Sistem peringatan dini penyakit tropis endemik berbasis data surveilans epidemiologi.</p></div>
+        <div class="service-card-footer"><span class="read-more">Pelajari lebih →</span></div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══ PAGE: UTILISASI ══ -->
+<div class="page" id="page-utilisasi">
+  <div class="page-hero" style="background:linear-gradient(135deg,#0d9488,#0f6fba);"><h2>⭐ Utilisasi Review</h2><p>Analisis komprehensif pemanfaatan layanan kesehatan untuk efisiensi dan peningkatan kualitas.</p></div>
+  <section class="section"><div class="section-inner">
+    <div class="cards-grid col2">
+      <div class="service-card"><div class="service-card-header"><div class="service-card-icon" style="background:var(--teal-light);">📊</div><div><h3>Analisis Pola Kunjungan</h3><span>Rawat Jalan & Rawat Inap</span></div></div><div class="service-card-body"><p>Menganalisis tren dan pola kunjungan pasien untuk mengoptimalkan penjadwalan dan alokasi sumber daya.</p><ul class="feature-list"><li>Tren kunjungan harian, mingguan, bulanan</li><li>Analisis beban layanan per poli</li><li>Identifikasi peak hours</li></ul></div></div>
+      <div class="service-card"><div class="service-card-header"><div class="service-card-icon" style="background:var(--teal-light);">🏥</div><div><h3>Review Utilisasi Bed</h3><span>Kapasitas Rawat Inap</span></div></div><div class="service-card-body"><p>Evaluasi tingkat hunian tempat tidur, Length of Stay (LOS), dan indikator efisiensi rawat inap.</p><ul class="feature-list"><li>BOR, ALOS, TOI, BTO</li><li>Perbandingan antar ruangan</li><li>Rekomendasi kapasitas optimal</li></ul></div></div>
+      <div class="service-card"><div class="service-card-header"><div class="service-card-icon" style="background:var(--teal-light);">💊</div><div><h3>Analisis Utilisasi Obat</h3><span>Farmasi Klinis</span></div></div><div class="service-card-body"><p>Monitoring penggunaan obat untuk efisiensi farmasi dan kepatuhan terhadap formularium.</p><ul class="feature-list"><li>Drug utilization review (DUR)</li><li>Analisis ABC-VEN</li><li>Kepatuhan formularium nasional</li></ul></div></div>
+      <div class="service-card"><div class="service-card-header"><div class="service-card-icon" style="background:var(--teal-light);">📋</div><div><h3>Dashboard Pelaporan</h3><span>Visualisasi Data</span></div></div><div class="service-card-body"><p>Dashboard interaktif untuk pelaporan utilisasi secara real-time kepada manajemen fasilitas kesehatan.</p><ul class="feature-list"><li>Visualisasi interaktif</li><li>Export laporan otomatis</li><li>Peringatan indikator kritis</li></ul></div></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══ PAGE: PREDICTIVE ══ -->
+<div class="page" id="page-predictive">
+  <div class="page-hero" style="background:linear-gradient(135deg,#0f6fba,#7c3aed);"><h2>📈 Predictive Kebutuhan Tempat Tidur</h2><p>Prediksi kapasitas rawat inap menggunakan kecerdasan buatan untuk perencanaan yang lebih baik.</p></div>
+  <section class="section"><div class="section-inner">
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:start;">
+      <div>
+        <div class="section-tag">🤖 Machine Learning</div>
+        <h2 class="section-title">Prediksi Cerdas<br>Kapasitas Rumah Sakit</h2>
+        <p style="color:var(--muted);line-height:1.8;margin:12px 0 20px;font-size:15px;">Sistem ini menggunakan algoritma machine learning untuk memprediksi jumlah pasien rawat inap berdasarkan data historis, musim, tren penyakit, dan faktor lingkungan.</p>
+        <ul class="feature-list" style="gap:12px;">
+          <li>Prediksi 7, 14, dan 30 hari ke depan</li>
+          <li>Model ARIMA &amp; LSTM neural network</li>
+          <li>Faktor musiman &amp; epidemiologis</li>
+          <li>Akurasi prediksi ≥85%</li>
+          <li>Alert otomatis saat kapasitas kritis</li>
+        </ul>
+        <div style="margin-top:24px;padding:16px 20px;background:#fff7ed;border-radius:12px;border-left:4px solid var(--orange);">
+          <div style="font-size:13px;font-weight:700;color:var(--orange);">🚧 Fitur ini sedang dalam pengembangan</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;">Estimasi rilis: Q3 2025. Daftarkan email untuk notifikasi.</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,#dbeafe,#e0f0ff);border-radius:20px;padding:28px;">
+        <div style="font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--primary);margin-bottom:16px;">📊 Simulasi Prediksi (Ilustrasi)</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px;"><div style="font-size:12px;color:var(--muted);width:52px;text-align:right;">Senin</div><div style="flex:1;height:22px;background:var(--primary);border-radius:4px;opacity:.7;"></div><div style="font-size:12px;font-weight:700;">124</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="font-size:12px;color:var(--muted);width:52px;text-align:right;">Selasa</div><div style="flex:1;height:22px;background:var(--primary);border-radius:4px;opacity:.85;"></div><div style="font-size:12px;font-weight:700;">138</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="font-size:12px;color:var(--muted);width:52px;text-align:right;">Rabu</div><div style="flex:1;height:22px;background:#f59e0b;border-radius:4px;"></div><div style="font-size:12px;font-weight:700;color:#f59e0b;">155 ⚠️</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="font-size:12px;color:var(--muted);width:52px;text-align:right;">Kamis</div><div style="flex:1;height:22px;background:var(--primary);border-radius:4px;opacity:.75;"></div><div style="font-size:12px;font-weight:700;">131</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="font-size:12px;color:var(--muted);width:52px;text-align:right;">Jumat</div><div style="flex:1;height:22px;background:var(--primary);border-radius:4px;opacity:.6;"></div><div style="font-size:12px;font-weight:700;">118</div></div>
+        </div>
+        <div style="margin-top:14px;padding:11px;background:rgba(239,68,68,.1);border-radius:10px;border-left:3px solid #ef4444;"><div style="font-size:12px;font-weight:700;color:#ef4444;">⚠️ Prediksi Rabu: Kapasitas Kritis</div><div style="font-size:12px;color:var(--muted);">Kebutuhan 155 TT, kapasitas 150 TT</div></div>
+      </div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══ PAGE: DETEKSI ══ -->
+<div class="page" id="page-deteksi">
+  <div class="page-hero" style="background:linear-gradient(135deg,#166534,#0d9488);"><h2>🛡️ Sistem Deteksi Dini Penyakit Tropis</h2><p>Surveilans berbasis data untuk deteksi dini KLB penyakit tropis endemik di wilayah Ngawi dan sekitarnya.</p></div>
+  <section class="section"><div class="section-inner">
+    <div style="margin-bottom:32px;padding:18px 24px;background:#fff7ed;border-radius:14px;border-left:4px solid var(--orange);display:flex;align-items:center;gap:14px;">
+      <div style="font-size:28px;">🚧</div>
+      <div><div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--orange);">Fitur Sedang dalam Pengembangan</div><div style="font-size:13px;color:var(--muted);margin-top:3px;">Sistem deteksi dini penyakit tropis akan segera hadir. Estimasi rilis Q4 2025.</div></div>
+    </div>
+    <div class="cards-grid col3">
+      <div class="card"><div class="card-icon" style="background:#fef2f2;">🦟</div><h3>Demam Berdarah Dengue</h3><p>Monitoring kasus DBD dengan sistem peringatan berbasis indikator curah hujan, kepadatan vektor, dan riwayat kasus.</p><div class="card-tag" style="background:#fef2f2;color:#dc2626;">Endemik</div></div>
+      <div class="card"><div class="card-icon" style="background:#fefce8;">🦠</div><h3>Leptospirosis</h3><p>Deteksi dini leptospirosis berdasarkan data banjir, kontak hewan, dan pola musiman.</p><div class="card-tag" style="background:#fefce8;color:#ca8a04;">Musiman</div></div>
+      <div class="card"><div class="card-icon" style="background:#dcfce7;">🌊</div><h3>Diare &amp; Kolera</h3><p>Deteksi kluster penyakit diare berpotensi wabah melalui analisis spasio-temporal.</p><div class="card-tag" style="background:#dcfce7;color:var(--teal);">Surveilans</div></div>
+      <div class="card"><div class="card-icon" style="background:#ede9fe;">🗺️</div><h3>Pemetaan Sebaran Kasus</h3><p>Visualisasi peta interaktif sebaran kasus penyakit tropis berbasis GIS untuk identifikasi hot spot.</p><div class="card-tag" style="background:#ede9fe;color:#7c3aed;">GIS & Spasial</div></div>
+      <div class="card"><div class="card-icon" style="background:var(--primary-light);">🔔</div><h3>Alert Otomatis</h3><p>Notifikasi otomatis kepada petugas kesehatan saat ambang batas KLB terlampaui.</p><div class="card-tag" style="background:var(--primary-light);color:var(--primary);">Real-time</div></div>
+      <div class="card"><div class="card-icon" style="background:#fff7ed;">📡</div><h3>Integrasi Multisumber</h3><p>Penggabungan data dari Puskesmas, RSUD, BMKG, dan sumber lain untuk analisis komprehensif.</p><div class="card-tag" style="background:#fff7ed;color:var(--orange);">Integrasi</div></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══ PAGE: PORTOFOLIO ══ -->
+<div class="page" id="page-portofolio">
+  <div class="page-hero" style="background:linear-gradient(135deg,#ea580c,#f59e0b);"><h2>💼 Portofolio</h2><p>Karya dan kolaborasi dari mahasiswa dan tim peneliti PSDKU MIK Ngawi.</p></div>
+  <section class="section"><div class="section-inner">
+    <div class="cards-grid col2">
+      <div class="card" onclick="showPage('research')" style="cursor:pointer;border-color:var(--orange-light);"><div style="font-size:48px;margin-bottom:16px;">🤝</div><h3>Research &amp; Project Collaboration</h3><p>Proyek kolaborasi riset antara mahasiswa, dosen, dan mitra industri kesehatan.</p><div class="card-tag" style="background:var(--orange-light);color:var(--orange);">12+ Proyek Aktif</div></div>
+      <div class="card" onclick="showPage('produk')" style="cursor:pointer;border-color:#f3e8ff;"><div style="font-size:48px;margin-bottom:16px;">🎓</div><h3>Produk Mahasiswa</h3><p>Kumpulan karya inovatif mahasiswa MIK: sistem informasi, aplikasi kesehatan, dan penelitian terapan.</p><div class="card-tag" style="background:#f3e8ff;color:#7c3aed;">50+ Produk</div></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══ PAGE: RESEARCH ══ -->
+<div class="page" id="page-research">
+  <div class="page-hero" style="background:linear-gradient(135deg,#ea580c,#f59e0b);"><h2>🤝 Research &amp; Project Collaboration</h2><p>Kolaborasi riset multidisiplin menghasilkan solusi inovatif di bidang kesehatan.</p></div>
+  <section class="section"><div class="section-inner">
+    <div class="cards-grid col2">
+      <div class="porto-card"><div class="porto-thumb" style="background:linear-gradient(135deg,#fed7aa,#fde68a);">🔬</div><div class="porto-body"><h4>Sistem Informasi Surveilans Penyakit Berbasis Web</h4><p>Pengembangan platform surveilans penyakit menular terintegrasi untuk Dinkes Kabupaten Ngawi.</p><div class="porto-meta"><div class="porto-author">👨‍🔬 Tim Riset MIK</div><div class="porto-year">2024</div></div></div></div>
+      <div class="porto-card"><div class="porto-thumb" style="background:linear-gradient(135deg,#c7d2fe,#ddd6fe);">🤖</div><div class="porto-body"><h4>Prediksi Kapasitas RS Menggunakan LSTM</h4><p>Penerapan deep learning untuk prediksi kebutuhan tempat tidur di RSUD dr. Soeroto Ngawi.</p><div class="porto-meta"><div class="porto-author">👩‍💻 Kolaborasi RSUD Ngawi</div><div class="porto-year">2024</div></div></div></div>
+      <div class="porto-card"><div class="porto-thumb" style="background:linear-gradient(135deg,#a7f3d0,#6ee7b7);">🗺️</div><div class="porto-body"><h4>GIS Mapping Fasilitas Kesehatan Ngawi</h4><p>Pemetaan dan analisis spasial distribusi fasilitas kesehatan di Kabupaten Ngawi berbasis GIS open-source.</p><div class="porto-meta"><div class="porto-author">🏥 Dinkes Ngawi</div><div class="porto-year">2023</div></div></div></div>
+      <div class="porto-card"><div class="porto-thumb" style="background:linear-gradient(135deg,#fca5a5,#f87171);">💊</div><div class="porto-body"><h4>Evaluasi Drug Utilization Review Puskesmas</h4><p>Studi komparatif pola penggunaan obat di Puskesmas se-Kabupaten Ngawi untuk peningkatan mutu farmasi.</p><div class="porto-meta"><div class="porto-author">💊 Kolaborasi Apotek RS</div><div class="porto-year">2023</div></div></div></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══ PAGE: PRODUK ══ -->
+<div class="page" id="page-produk">
+  <div class="page-hero" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);"><h2>🎓 Produk Mahasiswa</h2><p>Inovasi dan karya terbaik mahasiswa MIK PSDKU Ngawi dalam bidang teknologi informasi kesehatan.</p></div>
+  <section class="section"><div class="section-inner">
+    <div class="porto-tabs">
+      <div class="porto-tab active" onclick="filterPorto(this,'semua')">Semua</div>
+      <div class="porto-tab" onclick="filterPorto(this,'aplikasi')">Aplikasi</div>
+      <div class="porto-tab" onclick="filterPorto(this,'skripsi')">Skripsi/TA</div>
+      <div class="porto-tab" onclick="filterPorto(this,'dashboard')">Dashboard</div>
+    </div>
+    <div class="cards-grid col3" id="produkGrid">
+      <div class="porto-card" data-cat="aplikasi"><div class="porto-thumb" style="background:linear-gradient(135deg,#bfdbfe,#dbeafe);">📱</div><div class="porto-body"><h4>Aplikasi Pendaftaran Pasien Online</h4><p>Sistem pendaftaran pasien berbasis mobile untuk Puskesmas di Ngawi dengan fitur antrian digital.</p><div class="porto-meta"><div class="porto-author">👤 Rina Kusuma W.</div><div class="porto-year">2024</div></div></div></div>
+      <div class="porto-card" data-cat="dashboard"><div class="porto-thumb" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);">📊</div><div class="porto-body"><h4>Dashboard Monitoring Imunisasi</h4><p>Visualisasi real-time cakupan imunisasi bayi dan balita berbasis web untuk Posyandu wilayah Ngawi.</p><div class="porto-meta"><div class="porto-author">👤 Budi Santoso</div><div class="porto-year">2024</div></div></div></div>
+      <div class="porto-card" data-cat="skripsi"><div class="porto-thumb" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);">📝</div><div class="porto-body"><h4>Analisis Kelengkapan Rekam Medis</h4><p>Evaluasi kelengkapan pengisian rekam medis rawat inap di RSUD dr. Soeroto Ngawi.</p><div class="porto-meta"><div class="porto-author">👤 Dewi Rahayu</div><div class="porto-year">2024</div></div></div></div>
+      <div class="porto-card" data-cat="aplikasi"><div class="porto-thumb" style="background:linear-gradient(135deg,#fde68a,#fcd34d);">🏥</div><div class="porto-body"><h4>Sistem Informasi Posyandu Digital</h4><p>Aplikasi pencatatan dan pelaporan kegiatan Posyandu secara digital terintegrasi dengan Puskesmas.</p><div class="porto-meta"><div class="porto-author">👤 Ahmad Fauzi</div><div class="porto-year">2023</div></div></div></div>
+      <div class="porto-card" data-cat="skripsi"><div class="porto-thumb" style="background:linear-gradient(135deg,#fecaca,#fca5a5);">🦠</div><div class="porto-body"><h4>Faktor Risiko DBD di Kab. Ngawi</h4><p>Analisis faktor-faktor risiko kejadian DBD menggunakan pendekatan epidemiologi berbasis data surveilans.</p><div class="porto-meta"><div class="porto-author">👤 Siti Nurhaliza</div><div class="porto-year">2023</div></div></div></div>
+      <div class="porto-card" data-cat="dashboard"><div class="porto-thumb" style="background:linear-gradient(135deg,#fed7aa,#fdba74);">📈</div><div class="porto-body"><h4>Dashboard Indikator Mutu RS</h4><p>Sistem monitoring indikator mutu pelayanan rumah sakit secara real-time untuk keperluan akreditasi.</p><div class="porto-meta"><div class="porto-author">👤 Hendra Wijaya</div><div class="porto-year">2023</div></div></div></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ══ PAGE: ARTIKEL ══ -->
+<div class="page" id="page-artikel">
+  <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+    <div class="section-inner">
+      <div class="flex-between">
+        <div><div class="section-tag">📰 Artikel</div><h2 class="section-title">Informasi Kesehatan Terkini</h2><p class="section-desc">Artikel, berita, dan opini seputar teknologi informasi kesehatan.</p></div>
+      </div>
+      <div class="cards-grid col3">
+        <div class="artikel-card"><div class="artikel-thumb" style="background:linear-gradient(135deg,#ccfbf1,#a7f3d0);">🦟<div class="artikel-cat" style="background:var(--teal-light);color:var(--teal);">Epidemiologi</div></div><div class="artikel-body"><h4>Tren Kasus DBD di Kabupaten Ngawi 2025</h4><p>Analisis pola musiman kejadian demam berdarah dengue dan implikasinya terhadap sistem deteksi dini...</p><div class="artikel-meta"><span>📅 15 Mei 2025</span><span>👁 1.2k</span></div></div></div>
+        <div class="artikel-card"><div class="artikel-thumb" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);">🤖<div class="artikel-cat" style="background:var(--primary-light);color:var(--primary);">Teknologi</div></div><div class="artikel-body"><h4>Implementasi AI dalam Manajemen Rawat Inap</h4><p>Penerapan model prediktif machine learning untuk optimasi kapasitas tempat tidur di RS tipe C...</p><div class="artikel-meta"><span>📅 10 Mei 2025</span><span>👁 987</span></div></div></div>
+        <div class="artikel-card"><div class="artikel-thumb" style="background:linear-gradient(135deg,#fed7aa,#fde68a);">📊<div class="artikel-cat" style="background:#fff7ed;color:var(--orange);">Data</div></div><div class="artikel-body"><h4>Dashboard Interaktif Data Kesehatan Daerah</h4><p>Pengembangan sistem visualisasi data kesehatan berbasis web untuk pengambilan keputusan manajemen...</p><div class="artikel-meta"><span>📅 5 Mei 2025</span><span>👁 756</span></div></div></div>
+        <div class="artikel-card"><div class="artikel-thumb" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);">📋<div class="artikel-cat" style="background:#ede9fe;color:#7c3aed;">Rekam Medis</div></div><div class="artikel-body"><h4>Standar Kelengkapan Rekam Medis Era Digital</h4><p>Tinjauan regulasi kelengkapan rekam medis elektronik dan tantangan implementasinya di faskes daerah...</p><div class="artikel-meta"><span>📅 28 Apr 2025</span><span>👁 632</span></div></div></div>
+        <div class="artikel-card"><div class="artikel-thumb" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0);">🌿<div class="artikel-cat" style="background:#dcfce7;color:#16a34a;">Kesmas</div></div><div class="artikel-body"><h4>Peran Posyandu Digital dalam Imunisasi</h4><p>Evaluasi efektivitas digitalisasi Posyandu terhadap peningkatan cakupan imunisasi dasar di Ngawi...</p><div class="artikel-meta"><span>📅 20 Apr 2025</span><span>👁 521</span></div></div></div>
+        <div class="artikel-card"><div class="artikel-thumb" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);">💊<div class="artikel-cat" style="background:#fce7f3;color:#db2777;">Farmasi</div></div><div class="artikel-body"><h4>Drug Utilization Review di Puskesmas</h4><p>Panduan praktis pelaksanaan DUR di puskesmas untuk peningkatan mutu pelayanan kefarmasian...</p><div class="artikel-meta"><span>📅 15 Apr 2025</span><span>👁 489</span></div></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ PAGE: TIM ══ -->
+<div class="page" id="page-tim">
+  <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+    <div class="section-inner">
+      <div class="text-center" style="margin-bottom:48px;">
+        <div class="section-tag" style="margin:0 auto 14px;">👥 Tim Kami</div>
+        <h2 class="section-title">Orang-orang di Balik Portal</h2>
+        <p class="section-desc" style="margin:0 auto;">Dosen, peneliti, dan mahasiswa berdedikasi yang membangun ekosistem inovasi kesehatan di Ngawi.</p>
+      </div>
+      <div class="section-tag">🏫 Dosen & Pembimbing</div>
+      <div class="cards-grid col3 mt-16">
+        <div class="tim-card"><div class="tim-avatar" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);">👨‍⚕️</div><h4>Dr. Ahmad Fauzi, S.KM., M.Kes.</h4><div class="role">Koordinator Program TEFA</div><div class="tim-div"></div><p>Spesialisasi epidemiologi dan sistem informasi kesehatan. Pengalaman 15 tahun di bidang MIK.</p></div>
+        <div class="tim-card"><div class="tim-avatar" style="background:linear-gradient(135deg,#ccfbf1,#a7f3d0);">👩‍💼</div><h4>Siti Rahayu, S.KM., M.Kes.</h4><div class="role">Dosen Rekam Medis & Informasi Kesehatan</div><div class="tim-div"></div><p>Ahli manajemen rekam medis elektronik dan akreditasi rumah sakit dengan fokus pada SIMRS.</p></div>
+        <div class="tim-card"><div class="tim-avatar" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);">👨‍🔬</div><h4>Budi Santoso, S.T., M.Kom.</h4><div class="role">Dosen Sistem Informasi Kesehatan</div><div class="tim-div"></div><p>Spesialis pengembangan sistem informasi berbasis web dan mobile untuk fasilitas kesehatan.</p></div>
+      </div>
+      <div class="section-tag mt-40">🎓 Tim Mahasiswa Aktif</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:16px;">
+        <div class="tim-card" style="padding:20px;"><div class="tim-avatar" style="width:60px;height:60px;font-size:28px;background:linear-gradient(135deg,#fed7aa,#fde68a);">👩‍💻</div><h4 style="font-size:14px;">Rina Kusuma W.</h4><div class="role" style="font-size:12px;">Pengembangan Aplikasi</div><div class="tim-div" style="width:30px;"></div><p style="font-size:12px;">Semester 6 — Mobile health app development.</p></div>
+        <div class="tim-card" style="padding:20px;"><div class="tim-avatar" style="width:60px;height:60px;font-size:28px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);">👨‍📊</div><h4 style="font-size:14px;">Hendra Wijaya</h4><div class="role" style="font-size:12px;">Analisis Data</div><div class="tim-div" style="width:30px;"></div><p style="font-size:12px;">Semester 6 — Data analytics & dashboard.</p></div>
+        <div class="tim-card" style="padding:20px;"><div class="tim-avatar" style="width:60px;height:60px;font-size:28px;background:linear-gradient(135deg,#fce7f3,#fbcfe8);">👩‍🔬</div><h4 style="font-size:14px;">Dewi Rahayu</h4><div class="role" style="font-size:12px;">Riset Rekam Medis</div><div class="tim-div" style="width:30px;"></div><p style="font-size:12px;">Semester 8 — Rekam medis elektronik.</p></div>
+        <div class="tim-card" style="padding:20px;"><div class="tim-avatar" style="width:60px;height:60px;font-size:28px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);">👨‍🏥</div><h4 style="font-size:14px;">Ahmad Rizki</h4><div class="role" style="font-size:12px;">Surveilans Kesehatan</div><div class="tim-div" style="width:30px;"></div><p style="font-size:12px;">Semester 6 — GIS & surveilans kesehatan.</p></div>
+        <div class="tim-card" style="padding:20px;"><div class="tim-avatar" style="width:60px;height:60px;font-size:28px;background:linear-gradient(135deg,#fef9c3,#fde68a);">👩‍💊</div><h4 style="font-size:14px;">Nurul Hidayah</h4><div class="role" style="font-size:12px;">Farmasi Informasi</div><div class="tim-div" style="width:30px;"></div><p style="font-size:12px;">Semester 8 — Drug utilization review.</p></div>
+        <div class="tim-card" style="padding:20px;"><div class="tim-avatar" style="width:60px;height:60px;font-size:28px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);">👨‍🎓</div><h4 style="font-size:14px;">Fajar Aditya</h4><div class="role" style="font-size:12px;">Machine Learning</div><div class="tim-div" style="width:30px;"></div><p style="font-size:12px;">Semester 6 — AI/ML untuk layanan kesehatan.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ PAGE: GALERI ══ -->
+<div class="page" id="page-galeri">
+  <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+    <div class="section-inner">
+      <div class="section-tag">🖼️ Galeri</div>
+      <h2 class="section-title">Dokumentasi Kegiatan</h2>
+      <p class="section-desc">Foto dan dokumentasi kegiatan akademik, penelitian, dan pengabdian masyarakat tim MIK Ngawi.</p>
+      <div class="gallery-grid">
+        <div class="gallery-item" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">🎓</div><div class="g-overlay"><h5>Seminar Nasional MIK 2024</h5><p>Pameran proyek mahasiswa</p></div></div>
+        <div class="gallery-item" style="background:linear-gradient(135deg,#ccfbf1,#a7f3d0);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">🏥</div><div class="g-overlay"><h5>Kunjungan RSUD dr. Soeroto</h5><p>Studi lapangan mahasiswa</p></div></div>
+        <div class="gallery-item" style="background:linear-gradient(135deg,#fed7aa,#fde68a);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">💻</div><div class="g-overlay"><h5>Workshop Data Analitik</h5><p>Pelatihan Python & R</p></div></div>
+        <div class="gallery-item" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">🤝</div><div class="g-overlay"><h5>MoU dengan Dinkes Ngawi</h5><p>Penandatanganan kerjasama riset</p></div></div>
+        <div class="gallery-item" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">📊</div><div class="g-overlay"><h5>Presentasi Capstone Project</h5><p>Sidang akhir mahasiswa</p></div></div>
+        <div class="gallery-item" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">🌿</div><div class="g-overlay"><h5>Pengabdian Masyarakat</h5><p>Edukasi kesehatan di Posyandu</p></div></div>
+        <div class="gallery-item" style="background:linear-gradient(135deg,#fef9c3,#fde68a);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">🏆</div><div class="g-overlay"><h5>Penghargaan Inovasi TEFA</h5><p>Penghargaan tingkat nasional 2024</p></div></div>
+        <div class="gallery-item" style="background:linear-gradient(135deg,#e0e7ff,#c7d2fe);" onclick="showNotif('📸 Foto akan segera tersedia!')"><div style="font-size:52px;">🔬</div><div class="g-overlay"><h5>Research Day 2024</h5><p>Pameran poster penelitian</p></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ PAGE: HUBUNGI ══ -->
+<div class="page" id="page-hubungi">
+  <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+    <div class="section-inner">
+      <div class="text-center" style="margin-bottom:8px;">
+        <div class="section-tag" style="margin:0 auto 14px;">✉️ Hubungi Kami</div>
+        <h2 class="section-title">Kami Siap Membantu Anda</h2>
+        <p class="section-desc" style="margin:0 auto;">Punya pertanyaan, ide kolaborasi, atau ingin bermitra? Jangan ragu menghubungi kami.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Informasi Kontak</h3>
+          <p>Temui kami di kampus atau hubungi melalui saluran berikut.</p>
+          <div class="ci"><div class="ci-icon">📍</div><div><strong>Alamat</strong><span>Jl. Yos Sudarso No. 1, Ngawi, Jawa Timur 63211</span></div></div>
+          <div class="ci"><div class="ci-icon">📞</div><div><strong>Telepon</strong><span>(0351) 749191</span></div></div>
+          <div class="ci"><div class="ci-icon">✉️</div><div><strong>Email</strong><span>mik.ngawi@poltekkesmajapahit.ac.id</span></div></div>
+          <div class="ci"><div class="ci-icon">🕐</div><div><strong>Jam Operasional</strong><span>Senin–Jumat, 08.00–16.00 WIB</span></div></div>
+          <div style="display:flex;gap:10px;margin-top:20px;">
+            <div style="width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" onclick="showNotif('Arahkan ke Instagram!')">📸</div>
+            <div style="width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" onclick="showNotif('Arahkan ke YouTube!')">▶️</div>
+            <div style="width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" onclick="showNotif('Arahkan ke Facebook!')">👤</div>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>Kirim Pesan</h3>
+          <div class="form-row"><div class="fg"><label>Nama Lengkap *</label><input type="text" placeholder="Nama Anda"></div><div class="fg"><label>Instansi</label><input type="text" placeholder="Nama instansi"></div></div>
+          <div class="form-row"><div class="fg"><label>Email *</label><input type="email" placeholder="email@contoh.com"></div><div class="fg"><label>No. Telepon</label><input type="tel" placeholder="08xxxxxxxxxx"></div></div>
+          <div class="fg"><label>Keperluan *</label><select><option>Pilih keperluan...</option><option>Kolaborasi Penelitian</option><option>Informasi Layanan</option><option>Kemitraan / MoU</option><option>Magang / PKL</option><option>Lainnya</option></select></div>
+          <div class="fg"><label>Pesan *</label><textarea placeholder="Tuliskan pesan Anda di sini..."></textarea></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="showNotif('✅ Pesan berhasil dikirim! Kami akan segera menghubungi Anda.')">Kirim Pesan 📨</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand"><strong>🏥 Portal Pusat Data &amp; Analisis Kesehatan</strong><p>Platform digital inovasi teknologi informasi kesehatan berbasis Teaching Factory PSDKU MIK Ngawi.</p></div>
+      <div class="fcol"><h5>Layanan</h5><a onclick="showPage('utilisasi')">Utilisasi Review</a><a onclick="showPage('predictive')">Predictive Tempat Tidur</a><a onclick="showPage('deteksi')">Deteksi Dini Penyakit</a></div>
+      <div class="fcol"><h5>Portofolio</h5><a onclick="showPage('research')">Research &amp; Collaboration</a><a onclick="showPage('produk')">Produk Mahasiswa</a><a onclick="showPage('artikel')">Artikel</a></div>
+      <div class="fcol"><h5>Informasi</h5><a onclick="showPage('tentang')">Tentang Kami</a><a onclick="showPage('tim')">Tim</a><a onclick="showPage('galeri')">Galeri</a><a onclick="showPage('hubungi')">Hubungi Kami</a></div>
+    </div>
+    <div class="footer-bot"><span>© 2025 Embrio TEFA PSDKU MIK Ngawi. Hak cipta dilindungi.</span><span>Dibangun dengan ❤️ oleh Tim MIK Ngawi</span></div>
+  </div>
+</footer>
+
+<div class="notif" id="notif">💬 <span id="notif-txt"></span></div>
+
+<script>
+// ── PAGES ──
+const PAGES = ['beranda','tentang','layanan','utilisasi','predictive','deteksi','portofolio','research','produk','artikel','tim','galeri','hubungi'];
+const NAV_MAP = {beranda:'beranda',tentang:'tentang',layanan:'layanan',utilisasi:'layanan',predictive:'layanan',deteksi:'layanan',portofolio:'portofolio',research:'portofolio',produk:'portofolio',artikel:'artikel',tim:'tim',galeri:'galeri',hubungi:'hubungi'};
+
+function showPage(id) {
+  PAGES.forEach(p => {
+    const el = document.getElementById('page-'+p); if(el) el.classList.remove('active');
+    const nv = document.getElementById('nav-'+p);  if(nv) nv.classList.remove('active');
+  });
+  const pg = document.getElementById('page-'+id); if(pg){pg.classList.add('active');window.scrollTo(0,0);}
+  const nk = NAV_MAP[id]||id;
+  const nv = document.getElementById('nav-'+nk); if(nv) nv.classList.add('active');
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+
+// ── PORTO FILTER ──
+function filterPorto(btn,cat) {
+  document.querySelectorAll('.porto-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#produkGrid .porto-card').forEach(c=>{c.style.display=(cat==='semua'||c.dataset.cat===cat)?'':'none';});
+}
+
+// ── NOTIF ──
+let nt;
+function showNotif(msg) {
+  const el=document.getElementById('notif'); document.getElementById('notif-txt').textContent=msg;
+  el.classList.add('show'); clearTimeout(nt); nt=setTimeout(()=>el.classList.remove('show'),3400);
+}
+
+// ── LOGIN ──
+function openLogin()  { document.getElementById('lbdrop').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeLogin() { document.getElementById('lbdrop').classList.remove('open'); document.body.style.overflow=''; }
+function bdropClick(e){ if(e.target===document.getElementById('lbdrop')) closeLogin(); }
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('fm-masuk').style.display  = tab==='masuk'  ? '' : 'none';
+  document.getElementById('fm-daftar').style.display = tab==='daftar' ? '' : 'none';
+}
+
+function pickRole(el) {
+  el.closest('.lroles').querySelectorAll('.lrole').forEach(r=>r.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function togglePass(id, btn) {
+  const inp = document.getElementById(id);
+  if(!inp) return;
+  inp.type = inp.type==='password' ? 'text' : 'password';
+  btn.style.opacity = inp.type==='text' ? '1' : '.6';
+}
+
+function checkStrength(inp) {
+  const bar = document.getElementById('pstr'); const fill = document.getElementById('pstr-bar');
+  if(!bar||!fill) return;
+  bar.style.display = 'block';
+  const v = inp.value; let s = 0;
+  if(v.length>=8) s++; if(/[A-Z]/.test(v)) s++; if(/[0-9]/.test(v)) s++; if(/[^A-Za-z0-9]/.test(v)) s++;
+  const w=['0%','35%','60%','80%','100%'][s];
+  const c=['#e2e8f0','#ef4444','#f59e0b','#3b82f6','#22c55e'][s];
+  fill.style.width=w; fill.style.background=c;
+}
+
+function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value;
+  const btn   = document.getElementById('l-btn-txt');
+  if(!email||!pass){ showNotif('⚠️ Email/NIM dan password tidak boleh kosong!'); return; }
+  btn.textContent='Memverifikasi...';
+  setTimeout(()=>{
+    btn.textContent='Masuk ke Portal';
+    closeLogin();
+    showNotif('✅ Berhasil masuk! Selamat datang di Portal Kesehatan.');
+  }, 1500);
+}
+
+function doRegister() {
+  showNotif('✅ Pendaftaran berhasil! Silakan cek email untuk verifikasi akun.');
+  setTimeout(()=>{ closeLogin(); }, 1200);
+}
+
+// Keyboard ESC to close
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLogin(); });
+</script>
+</body>
+</html>
